@@ -1,0 +1,58 @@
+# Ignore all dotfiles...
+.*
+# except for .gitignore
+!.gitignore
+
+### Java template
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+
+# Compiled source #
+###################
+*.com
+*.dll
+*.exe
+*.o
+*.so
+
+# Packages #
+############
+# it's better to unpack these files and commit the raw source
+# git has its own built in compression methods
+*.7z
+*.dmg
+*.gz
+*.iso
+*.rar
+*.tar
+*.zip
+
+# Logs and databases #
+######################
+*.log
+*.sql
+*.sqlite
+
+# OS generated files #
+######################
+ehthumbs.db
+Icon?
+Thumbs.db
+
+
+# general
+*~
+
+# Eclipse
+.settings
+.project
+.classpath
+
