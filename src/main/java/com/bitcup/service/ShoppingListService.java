@@ -1,7 +1,7 @@
 package com.bitcup.service;
 
+import com.bitcup.entity.ShoppingItem;
 import com.bitcup.entity.ShoppingList;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -17,9 +17,11 @@ public interface ShoppingListService {
 
     ShoppingList addList(String owner, ShoppingList list);
 
-    void addItemToList(String owner, String listId, String itemName);
+    void addItemToList(String owner, String listId, ShoppingItem item);
 
     void deleteList(String owner, String listId);
+
+    void updateList(String owner, ShoppingList list);
 
     void clearItemsInList(String owner, String listId);
 
@@ -27,5 +29,5 @@ public interface ShoppingListService {
 
     void removeItemByNameFromList(String owner, String listId, String itemName);
 
-    void togglePurchased(String owner, String itemId);
+    void updateItem(String owner, ShoppingItem item);
 }

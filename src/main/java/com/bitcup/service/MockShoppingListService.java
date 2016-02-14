@@ -1,5 +1,6 @@
 package com.bitcup.service;
 
+import com.bitcup.entity.ShoppingItem;
 import com.bitcup.entity.ShoppingList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -7,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -52,33 +54,46 @@ public class MockShoppingListService implements ShoppingListService {
     }
 
     @Override
-    public void addItemToList(String owner, String listId, String itemName) {
+    public void addItemToList(String owner, String listId, ShoppingItem item) {
         ShoppingList list = getList(owner, listId);
-        Map<String, Object> item = Maps.newHashMap();
-        item.put("id", UUID.randomUUID().toString());
-        item.put("purchased", false);
-        item.put("name", itemName);
+        item.setId(UUID.randomUUID().toString());
+        LOGGER.info("adding item: {} to list: {} for user {}", item, list, owner);
+        if (list.getItems() == null) {
+            list.setItems(new ArrayList<>());
+        }
         list.getItems().add(0, item);
     }
 
     @Override
     public void deleteList(String owner, String listId) {
         ShoppingList list = getList(owner, listId);
+        LOGGER.info("deleting list: {} for user {}", list, owner);
         data.get(owner).remove(list);
+    }
+
+    @Override
+    public void updateList(String owner, ShoppingList list) {
+        ShoppingList toUpdate = getList(owner, list.getId());
+        if (toUpdate != null) {
+            toUpdate.setName(list.getName());
+            LOGGER.info("updated list: {} for user {}", list, owner);
+        }
     }
 
     @Override
     public void clearItemsInList(String owner, String listId) {
         ShoppingList list = getList(owner, listId);
         list.getItems().clear();
+        LOGGER.info("cleared list: {} for user {}", list, owner);
     }
 
     @Override
     public void removeItemById(String owner, String itemId) {
-        Map<String, Object> toRemove = findItem(owner, itemId);
+        ShoppingItem toRemove = findItem(owner, itemId);
         if (toRemove != null) {
             for (ShoppingList sl : data.get(owner)) {
                 sl.getItems().remove(toRemove);
+                LOGGER.info("removed item: {} for user {}", toRemove, owner);
             }
         }
     }
@@ -89,17 +104,19 @@ public class MockShoppingListService implements ShoppingListService {
     }
 
     @Override
-    public void togglePurchased(String owner, String itemId) {
-        Map<String, Object> toToggle = findItem(owner, itemId);
-        if (toToggle != null) {
-            toToggle.put("purchased", !(Boolean) toToggle.get("purchased"));
+    public void updateItem(String owner, ShoppingItem item) {
+        ShoppingItem toUpdate = findItem(owner, item.getId());
+        if (toUpdate != null) {
+            toUpdate.setPurchased(item.isPurchased());
+            toUpdate.setName(item.getName());
+            LOGGER.info("updated item: {} for user {}", toUpdate, owner);
         }
     }
 
-    private Map<String, Object> findItem(String owner, String itemId) {
+    private ShoppingItem findItem(String owner, String itemId) {
         for (ShoppingList sl : data.get(owner)) {
-            for (Map<String, Object> item : sl.getItems()) {
-                if (item.get("id").equals(itemId)) {
+            for (ShoppingItem item : sl.getItems()) {
+                if (item.getId().equals(itemId)) {
                     return item;
                 }
             }

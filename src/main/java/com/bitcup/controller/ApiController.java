@@ -1,5 +1,6 @@
 package com.bitcup.controller;
 
+import com.bitcup.entity.ShoppingItem;
 import com.bitcup.entity.ShoppingList;
 import com.bitcup.service.ShoppingListService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.servlet.http.HttpServletRequest;
 
 /**
+ * todo: follow http://www.restapitutorial.com/lessons/httpmethods.html
+ *
  * @author bitcup
  */
 @RestController
@@ -40,6 +43,55 @@ public class ApiController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand(list.getId()).toUri());
         return new ResponseEntity<>(null, httpHeaders, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "/lists/{listId}/items", method = RequestMethod.POST)
+    public ResponseEntity<?> addItemToList(HttpServletRequest request, @PathVariable("listId") String listId,
+                                           @RequestBody ShoppingItem item) {
+        service.addItemToList(getUserId(request), listId, item);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setLocation(ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand(listId).toUri());
+        return new ResponseEntity<>(null, httpHeaders, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "/lists/{listId}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deleteList(HttpServletRequest request, @PathVariable("listId") String listId) {
+        service.deleteList(getUserId(request), listId);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setLocation(ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand(listId).toUri());
+        return new ResponseEntity<>(null, httpHeaders, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/lists/{listId}", method = RequestMethod.PUT)
+    public ResponseEntity<?> updateList(HttpServletRequest request, @PathVariable("listId") String listId, @RequestBody ShoppingList list) {
+        service.updateList(getUserId(request), list);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setLocation(ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand(listId).toUri());
+        return new ResponseEntity<>(null, httpHeaders, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/lists/{listId}/clear", method = RequestMethod.POST)
+    public ResponseEntity<?> clearListItems(HttpServletRequest request, @PathVariable("listId") String listId) {
+        service.clearItemsInList(getUserId(request), listId);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setLocation(ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand(listId).toUri());
+        return new ResponseEntity<>(null, httpHeaders, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/items/{itemId}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deleteItem(HttpServletRequest request, @PathVariable("itemId") String itemId) {
+        service.removeItemById(getUserId(request), itemId);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setLocation(ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand(itemId).toUri());
+        return new ResponseEntity<>(null, httpHeaders, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/items/{itemId}", method = RequestMethod.PUT)
+    public ResponseEntity<?> updateItem(HttpServletRequest request, @PathVariable("itemId") String itemId, @RequestBody ShoppingItem item) {
+        service.updateItem(getUserId(request), item);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setLocation(ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand(itemId).toUri());
+        return new ResponseEntity<>(null, httpHeaders, HttpStatus.OK);
     }
 
     private String getUserId(HttpServletRequest request) {

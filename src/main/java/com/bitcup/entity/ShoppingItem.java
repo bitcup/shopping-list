@@ -5,15 +5,12 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.List;
-import java.util.Map;
-
 /**
  * @author bitcup
  */
 @EqualsAndHashCode
 @ToString
-public class ShoppingList {
+public class ShoppingItem {
     @Getter
     @Setter
     private String id;
@@ -24,5 +21,5 @@ public class ShoppingList {
 
     @Getter
     @Setter
-    private List<ShoppingItem> items;
+    private boolean purchased;
 }
