@@ -38,11 +38,6 @@ public class MockShoppingListService implements ShoppingListService {
     }
 
     @Override
-    public ShoppingList getListByName(String owner, String listName) {
-        return data.get(owner).stream().filter(shoppingList -> shoppingList.getName().equals(listName)).findFirst().get();
-    }
-
-    @Override
     public ShoppingList addList(String owner, ShoppingList list) {
         list.setId(UUID.randomUUID().toString());
         if (!data.containsKey(owner)) {
@@ -51,17 +46,6 @@ public class MockShoppingListService implements ShoppingListService {
         data.get(owner).add(0, list);
         LOGGER.info("list: {} created for user {}", list, owner);
         return list;
-    }
-
-    @Override
-    public void addItemToList(String owner, String listId, ShoppingItem item) {
-        ShoppingList list = getList(owner, listId);
-        item.setId(UUID.randomUUID().toString());
-        LOGGER.info("adding item: {} to list: {} for user {}", item, list, owner);
-        if (list.getItems() == null) {
-            list.setItems(new ArrayList<>());
-        }
-        list.getItems().add(0, item);
     }
 
     @Override
@@ -76,51 +60,17 @@ public class MockShoppingListService implements ShoppingListService {
         ShoppingList toUpdate = getList(owner, list.getId());
         if (toUpdate != null) {
             toUpdate.setName(list.getName());
+            if (toUpdate.getItems() == null) {
+                toUpdate.setItems(new ArrayList<>());
+            }
+            toUpdate.getItems().clear();
+            for (ShoppingItem item : list.getItems()) {
+                if (item.getId() == null) {
+                    item.setId(UUID.randomUUID().toString());
+                }
+                toUpdate.getItems().add(item);
+            }
             LOGGER.info("updated list: {} for user {}", list, owner);
         }
-    }
-
-    @Override
-    public void clearItemsInList(String owner, String listId) {
-        ShoppingList list = getList(owner, listId);
-        list.getItems().clear();
-        LOGGER.info("cleared list: {} for user {}", list, owner);
-    }
-
-    @Override
-    public void removeItemById(String owner, String itemId) {
-        ShoppingItem toRemove = findItem(owner, itemId);
-        if (toRemove != null) {
-            for (ShoppingList sl : data.get(owner)) {
-                sl.getItems().remove(toRemove);
-                LOGGER.info("removed item: {} for user {}", toRemove, owner);
-            }
-        }
-    }
-
-    @Override
-    public void removeItemByNameFromList(String owner, String listId, String itemName) {
-
-    }
-
-    @Override
-    public void updateItem(String owner, ShoppingItem item) {
-        ShoppingItem toUpdate = findItem(owner, item.getId());
-        if (toUpdate != null) {
-            toUpdate.setPurchased(item.isPurchased());
-            toUpdate.setName(item.getName());
-            LOGGER.info("updated item: {} for user {}", toUpdate, owner);
-        }
-    }
-
-    private ShoppingItem findItem(String owner, String itemId) {
-        for (ShoppingList sl : data.get(owner)) {
-            for (ShoppingItem item : sl.getItems()) {
-                if (item.getId().equals(itemId)) {
-                    return item;
-                }
-            }
-        }
-        return null;
     }
 }
