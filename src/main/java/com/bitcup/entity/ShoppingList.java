@@ -1,5 +1,6 @@
 package com.bitcup.entity;
 
+import com.google.common.collect.Lists;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,5 +25,5 @@ public class ShoppingList {
 
     @Getter
     @Setter
-    private List<ShoppingItem> items;
+    private List<ShoppingItem> items = Lists.newArrayList();
 }
