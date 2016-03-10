@@ -18,37 +18,37 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
+    <repositories>
+        <repository>
+            <id>opensourceagility-release</id>
+            <url>http://repo.opensourceagility.com/release/</url>
+        </repository>
+    </repositories>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
+        <aws-java-sdk.version>1.10.56</aws-java-sdk.version>
     </properties>
 
     <dependencies>
-
-
         <!-- commons -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.4</version>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>commons-configuration</groupId>-->
-            <!--<artifactId>commons-configuration</artifactId>-->
-            <!--<version>1.9</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
             <version>1.10</version>
         </dependency>
 
-        <!-- lombok -->
+        <!--guava-->
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.16.6</version>
-            <scope>provided</scope>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>19.0</version>
         </dependency>
 
         <!--spring-->
@@ -57,23 +57,38 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <!--<dependency>-->
-        <!--<groupId>org.springframework.boot</groupId>-->
-        <!--<artifactId>spring-boot-starter-data-jpa</artifactId>-->
+            <!--<groupId>org.springframework.boot</groupId>-->
+            <!--<artifactId>spring-boot-starter-data-rest</artifactId>-->
         <!--</dependency>-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-rest</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.socialsignin</groupId>
+            <artifactId>spring-data-dynamodb</artifactId>
+            <version>4.2.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-core</artifactId>
+            <version>${aws-java-sdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-dynamodb</artifactId>
+            <version>${aws-java-sdk.version}</version>
+            <optional>true</optional>
+        </dependency>
+
+
     </dependencies>
 
     <build>
@@ -84,6 +99,5 @@
             </plugin>
         </plugins>
     </build>
-
 
 </project>

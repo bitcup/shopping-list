@@ -57,3 +57,5 @@ Thumbs.db
 .classpath
 
 *.iml
+
+/src/main/resources/aws.properties

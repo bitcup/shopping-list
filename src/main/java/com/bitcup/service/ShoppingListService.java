@@ -1,6 +1,6 @@
 package com.bitcup.service;
 
-import com.bitcup.entity.ShoppingList;
+import com.bitcup.dto.ShoppingListDto;
 
 import java.util.List;
 
@@ -8,13 +8,25 @@ import java.util.List;
  * @author bitcup
  */
 public interface ShoppingListService {
-    List<ShoppingList> getAllLists(String owner);
 
-    ShoppingList getList(String owner, String id);
+    List<ShoppingListDto> getAllLists(String owner);
 
-    ShoppingList addList(String owner, ShoppingList list);
+    ShoppingListDto getList(String owner, String listId);
 
-    void deleteList(String owner, String listId);
+    List<ShoppingListDto> addList(String owner, String listName);
 
-    void updateList(String owner, ShoppingList list);
+    List<ShoppingListDto> deleteList(String owner, String listId);
+
+    List<ShoppingListDto> renameList(String owner, String listId, String listName);
+
+    List<ShoppingListDto> clearListItems(String owner, String listId);
+
+    ShoppingListDto addItemToList(String owner, String listId, String itemName);
+
+    ShoppingListDto deleteItemFromList(String owner, String listId, String itemId);
+
+    ShoppingListDto renameItemInList(String owner, String listId, String itemId, String itemName);
+
+    ShoppingListDto togglePurchasedForItemInList(String owner, String listId, String itemId);
+
 }
