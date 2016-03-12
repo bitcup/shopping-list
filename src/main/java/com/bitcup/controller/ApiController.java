@@ -104,14 +104,6 @@ public class ApiController {
         return new ResponseEntity<>(list, httpHeaders, HttpStatus.OK);
     }
 
-//    @RequestMapping(value = "/lists/{listId}", method = RequestMethod.PUT)
-//    public ResponseEntity<?> updateList(HttpServletRequest request, @PathVariable("listId") String listId, @RequestBody ShoppingListDto list) {
-//        service.updateList(getUserId(request), list);
-//        HttpHeaders httpHeaders = new HttpHeaders();
-//        httpHeaders.setLocation(ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand(listId).toUri());
-//        return new ResponseEntity<>(null, httpHeaders, HttpStatus.OK);
-//    }
-
     private String getUserId(HttpServletRequest request) {
         String authHeader = request.getHeader(REQUEST_AUTH_HEADER);
         if (authHeader == null) {
