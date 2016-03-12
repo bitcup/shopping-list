@@ -37,6 +37,13 @@ public class MockShoppingListService implements ShoppingListService {
     }
 
     @Override
+    public ShoppingListDto getListByName(String owner, String listName) {
+        ShoppingListDto list = data.get(owner).stream().filter(shoppingList -> shoppingList.getName().equals(listName)).findFirst().get();
+        LOGGER.info("found list: {} by name: {} for user {}", list, listName, owner);
+        return list;
+    }
+
+    @Override
     public List<ShoppingListDto> addList(String owner, String listName) {
         ShoppingListDto list = new ShoppingListDto();
         list.setId(UUID.randomUUID().toString());
@@ -88,6 +95,22 @@ public class MockShoppingListService implements ShoppingListService {
         ShoppingItemDto toRemove = null;
         for (ShoppingItemDto item : list.getItems()) {
             if (item.getId().equals(itemId)) {
+                toRemove = item;
+                break;
+            }
+        }
+        if (toRemove != null) {
+            list.getItems().remove(toRemove);
+        }
+        return list;
+    }
+
+    @Override
+    public ShoppingListDto deleteItemByNameFromList(String owner, String listId, String itemName) {
+        ShoppingListDto list = getList(owner, listId);
+        ShoppingItemDto toRemove = null;
+        for (ShoppingItemDto item : list.getItems()) {
+            if (item.getName().equals(itemName)) {
                 toRemove = item;
                 break;
             }

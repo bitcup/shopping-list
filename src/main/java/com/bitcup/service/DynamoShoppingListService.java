@@ -5,8 +5,6 @@ import com.bitcup.dto.ShoppingListDto;
 import com.bitcup.dynamo.ShoppingListHelper;
 import com.bitcup.entity.ShoppingLists;
 import com.bitcup.repository.ShoppingListsRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +16,6 @@ import java.util.UUID;
  */
 @Service
 public class DynamoShoppingListService implements ShoppingListService {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(MockShoppingListService.class);
 
     @Autowired
     private ShoppingListsRepository repository;
@@ -33,7 +29,13 @@ public class DynamoShoppingListService implements ShoppingListService {
     @Override
     public ShoppingListDto getList(String owner, String listId) {
         ShoppingLists lists = repository.findByUserId(owner);
-        return ShoppingListHelper.fromDynamoModel(lists, listId);
+        return ShoppingListHelper.singleFromDynamoModelById(lists, listId);
+    }
+
+    @Override
+    public ShoppingListDto getListByName(String owner, String listName) {
+        ShoppingLists lists = repository.findByUserId(owner);
+        return ShoppingListHelper.singleFromDynamoModelByName(lists, listName);
     }
 
     @Override
@@ -50,7 +52,7 @@ public class DynamoShoppingListService implements ShoppingListService {
     @Override
     public List<ShoppingListDto> deleteList(String owner, String listId) {
         ShoppingLists lists = repository.findByUserId(owner);
-        ShoppingListDto listDto = ShoppingListHelper.fromDynamoModel(lists, listId);
+        ShoppingListDto listDto = ShoppingListHelper.singleFromDynamoModelById(lists, listId);
         if (listDto != null) {
             List<ShoppingListDto> listDtos = ShoppingListHelper.fromDynamoModel(lists);
             listDtos.remove(listDto);
@@ -118,6 +120,30 @@ public class DynamoShoppingListService implements ShoppingListService {
                 toUpdate = dto;
                 for (ShoppingItemDto itemDto : dto.getItems()) {
                     if (itemDto.getId().equals(itemId)) {
+                        toDelete = itemDto;
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+        if (toDelete != null) {
+            toUpdate.getItems().remove(toDelete);
+            createOrUpdate(owner, allLists);
+        }
+        return toUpdate;
+    }
+
+    @Override
+    public ShoppingListDto deleteItemByNameFromList(String owner, String listId, String itemName) {
+        List<ShoppingListDto> allLists = getAllLists(owner);
+        ShoppingListDto toUpdate = null;
+        ShoppingItemDto toDelete = null;
+        for (ShoppingListDto dto : allLists) {
+            if (dto.getId().equals(listId)) {
+                toUpdate = dto;
+                for (ShoppingItemDto itemDto : dto.getItems()) {
+                    if (itemDto.getName().equals(itemName)) {
                         toDelete = itemDto;
                         break;
                     }

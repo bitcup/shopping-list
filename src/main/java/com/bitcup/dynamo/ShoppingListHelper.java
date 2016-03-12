@@ -27,9 +27,14 @@ public class ShoppingListHelper {
         return fromJSON(TYPE_REF, dynamoLists.getListsJson());
     }
 
-    public static ShoppingListDto fromDynamoModel(ShoppingLists dynamoLists, String listId) {
+    public static ShoppingListDto singleFromDynamoModelById(ShoppingLists dynamoLists, String listId) {
         List<ShoppingListDto> all = fromDynamoModel(dynamoLists);
         return all.stream().filter(dto -> dto.getId().equals(listId)).findAny().get();
+    }
+
+    public static ShoppingListDto singleFromDynamoModelByName(ShoppingLists dynamoLists, String listName) {
+        List<ShoppingListDto> all = fromDynamoModel(dynamoLists);
+        return all.stream().filter(dto -> dto.getName().equals(listName)).findFirst().get();
     }
 
     public static String toDynamoModel(List<ShoppingListDto> lists) {

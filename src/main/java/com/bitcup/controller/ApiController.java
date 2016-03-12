@@ -40,6 +40,11 @@ public class ApiController {
         return new ResponseEntity<>(service.getList(getUserId(request), listId), HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/lists/byName/{listName}", method = RequestMethod.GET)
+    public ResponseEntity<?> getListByName(HttpServletRequest request, @PathVariable("listName") String listName) {
+        return new ResponseEntity<>(service.getListByName(getUserId(request), listName), HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/lists", method = RequestMethod.POST)
     public ResponseEntity<?> addList(HttpServletRequest request, @RequestBody String listName) {
         List<ShoppingListDto> lists = service.addList(getUserId(request), listName);
@@ -83,6 +88,14 @@ public class ApiController {
     @RequestMapping(value = "/lists/{listId}/deleteItem/{itemId}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteItemFromList(HttpServletRequest request, @PathVariable("listId") String listId, @PathVariable("itemId") String itemId) {
         ShoppingListDto list = service.deleteItemFromList(getUserId(request), listId, itemId);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setLocation(ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand(listId).toUri());
+        return new ResponseEntity<>(list, httpHeaders, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/lists/{listId}/deleteItemByName/{itemName}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deleteItemByNameFromList(HttpServletRequest request, @PathVariable("listId") String listId, @PathVariable("itemName") String itemName) {
+        ShoppingListDto list = service.deleteItemByNameFromList(getUserId(request), listId, itemName);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ServletUriComponentsBuilder.fromCurrentRequest().buildAndExpand(listId).toUri());
         return new ResponseEntity<>(list, httpHeaders, HttpStatus.OK);

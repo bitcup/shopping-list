@@ -13,6 +13,8 @@ public interface ShoppingListService {
 
     ShoppingListDto getList(String owner, String listId);
 
+    ShoppingListDto getListByName(String owner, String listName);
+
     List<ShoppingListDto> addList(String owner, String listName);
 
     List<ShoppingListDto> deleteList(String owner, String listId);
@@ -24,6 +26,8 @@ public interface ShoppingListService {
     ShoppingListDto addItemToList(String owner, String listId, String itemName);
 
     ShoppingListDto deleteItemFromList(String owner, String listId, String itemId);
+
+    ShoppingListDto deleteItemByNameFromList(String owner, String listId, String itemName);
 
     ShoppingListDto renameItemInList(String owner, String listId, String itemId, String itemName);
 
