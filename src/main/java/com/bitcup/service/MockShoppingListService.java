@@ -121,23 +121,4 @@ public class MockShoppingListService implements ShoppingListService {
         }
         return list;
     }
-
-//    @Override
-//    public void updateList(String owner, ShoppingListDto list) {
-//        ShoppingListDto toUpdate = getList(owner, list.getId());
-//        if (toUpdate != null) {
-//            toUpdate.setName(list.getName());
-//            if (toUpdate.getItems() == null) {
-//                toUpdate.setItems(new ArrayList<>());
-//            }
-//            toUpdate.getItems().clear();
-//            for (ShoppingItemDto item : list.getItems()) {
-//                if (item.getId() == null) {
-//                    item.setId(UUID.randomUUID().toString());
-//                }
-//                toUpdate.getItems().add(item);
-//            }
-//            LOGGER.info("updated list: {} for user {}", list, owner);
-//        }
-//    }
 }
