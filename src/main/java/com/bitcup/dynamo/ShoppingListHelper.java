@@ -34,7 +34,7 @@ public class ShoppingListHelper {
 
     public static ShoppingListDto singleFromDynamoModelByName(ShoppingLists dynamoLists, String listName) {
         List<ShoppingListDto> all = fromDynamoModel(dynamoLists);
-        return all.stream().filter(dto -> dto.getName().equals(listName)).findFirst().get();
+        return all.stream().filter(dto -> dto.getName().toLowerCase().equals(listName.toLowerCase())).findFirst().get();
     }
 
     public static String toDynamoModel(List<ShoppingListDto> lists) {

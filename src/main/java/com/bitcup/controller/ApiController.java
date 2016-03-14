@@ -1,6 +1,8 @@
 package com.bitcup.controller;
 
 import com.bitcup.dto.ShoppingListDto;
+import com.bitcup.dto.UserDto;
+import com.bitcup.dto.UserKeyDto;
 import com.bitcup.service.ShoppingListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -29,6 +32,16 @@ public class ApiController {
     //@Qualifier("mockShoppingListService")
     @Autowired
     private ShoppingListService service;
+
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @ResponseBody
+    public UserKeyDto login(@RequestBody UserDto user, HttpServletResponse response) {
+        if (user.getUsername().equals("test") && user.getPassword().equals("test")) {
+            return new UserKeyDto("abc", "1234567890");
+        }
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        return new UserKeyDto();
+    }
 
     @RequestMapping(value = "/lists", method = RequestMethod.GET)
     public ResponseEntity<?> getAllLists(HttpServletRequest request) {

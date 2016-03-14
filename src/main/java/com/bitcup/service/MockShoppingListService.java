@@ -38,7 +38,7 @@ public class MockShoppingListService implements ShoppingListService {
 
     @Override
     public ShoppingListDto getListByName(String owner, String listName) {
-        ShoppingListDto list = data.get(owner).stream().filter(shoppingList -> shoppingList.getName().equals(listName)).findFirst().get();
+        ShoppingListDto list = data.get(owner).stream().filter(shoppingList -> shoppingList.getName().toLowerCase().equals(listName.toLowerCase())).findFirst().get();
         LOGGER.info("found list: {} by name: {} for user {}", list, listName, owner);
         return list;
     }
